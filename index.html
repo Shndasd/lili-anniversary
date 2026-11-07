@@ -30,6 +30,20 @@ h1{font-weight:800;font-size:clamp(1.5rem,6vw,2.1rem);line-height:1.8;text-align
 .lbl{margin-top:12px;font-weight:500;font-size:.9rem;text-align:center;line-height:1.7;min-height:5.2em;width:132px}
 textarea{font-family:inherit;font-size:1.05rem;line-height:2;color:var(--deep);width:min(88vw,380px);margin:24px 0 24px;padding:16px 18px;border-radius:24px;border:2px solid var(--soft);background:rgba(255,255,255,.85);resize:none;outline:none;text-align:right}
 textarea:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(255,117,143,.25)}
+.cd{display:flex;gap:10px;margin:26px 0 8px;direction:ltr}
+.cd div{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.8);border:2px solid var(--soft);border-radius:20px;padding:12px 0;width:72px;box-shadow:0 8px 20px rgba(201,24,74,.15)}
+.cd b{font-weight:800;font-size:1.8rem;color:var(--red);line-height:1.5}
+.cd small{font-weight:300;font-size:.8rem}
+.card.closed{background:linear-gradient(160deg,#ff8fa3,#e5395f);border-color:#ff758f;cursor:pointer;overflow:hidden}
+.card.closed::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:56px;margin-left:-28px;background:rgba(255,255,255,.4)}
+.card.closed::after{content:"";position:absolute;left:0;right:0;top:50%;height:56px;margin-top:-28px;background:rgba(255,255,255,.4)}
+.card.closed .rev{display:none}
+.card:not(.closed) .gift{display:none}
+.gift{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
+.bow{font-style:normal;font-size:5rem;line-height:1;filter:drop-shadow(0 6px 10px rgba(128,15,47,.35));animation:shake 1.8s ease-in-out infinite}
+@keyframes shake{0%,70%,100%{transform:rotate(0)}75%{transform:rotate(-9deg)}85%{transform:rotate(9deg)}92%{transform:rotate(-5deg)}}
+.hint{margin-top:22px;background:#fff;color:var(--red);font-weight:800;padding:10px 22px;border-radius:30px;font-size:1rem;box-shadow:0 8px 20px rgba(128,15,47,.25);animation:beat 1.4s ease-in-out infinite}
+.rev{display:flex;flex-direction:column;align-items:center}
 button{font-family:inherit;cursor:pointer;border:0}
 .go{background:linear-gradient(135deg,var(--red),#e5395f);color:#fff;font-weight:800;font-size:1.05rem;padding:14px 48px;border-radius:40px;box-shadow:0 10px 26px rgba(201,24,74,.35);transition:opacity .3s,transform .2s;animation:beat 1.6s ease-in-out infinite}
 .go:disabled{opacity:.35;box-shadow:none;animation:none}
@@ -69,7 +83,19 @@ button:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 <body>
 <div id="float"></div>
 
-<section class="screen" id="s1">
+<section class="screen off" id="s0">
+  <div class="bigheart">♥</div>
+  <h1>هنوز زوده عشقم</h1>
+  <div class="cd">
+    <div><b id="cd0">۰</b><small>روز</small></div>
+    <div><b id="cd1">۰</b><small>ساعت</small></div>
+    <div><b id="cd2">۰</b><small>دقیقه</small></div>
+    <div><b id="cd3">۰</b><small>ثانیه</small></div>
+  </div>
+  <div class="txt">باید تا سالگردمون صبر کنی ♥</div>
+</section>
+
+<section class="screen off" id="s1">
   <h1>لیلیا، یه سوال کوچولو ♥</h1>
   <div class="sub">ستون‌ها رو با انگشتت بکش بالا</div>
   <div class="chart">
@@ -226,17 +252,23 @@ for(let k=0;k<16;k++){
   s.style.animationDelay=(-Math.random()*14)+'s';
   fl.appendChild(s);
 }
-function burst(x,y,n){
+function burst(x,y,n,paper){
+  const cols=['#c9184a','#ff758f','#ffb3c1','#ffd166','#fff','#e5395f'];
   for(let k=0;k<n;k++){
     const e=document.createElement('span');
     e.className='b';
-    e.textContent=Math.random()>.5?'♥':'❤';
+    if(paper){
+      e.style.width='9px';e.style.height='14px';
+      e.style.background=cols[Math.floor(Math.random()*cols.length)];
+    }else{
+      e.textContent=Math.random()>.5?'♥':'❤';
+      e.style.fontSize=(14+Math.random()*18)+'px';
+    }
     e.style.left=x+'px';e.style.top=y+'px';
-    e.style.fontSize=(14+Math.random()*18)+'px';
-    const a=Math.random()*6.283,d=50+Math.random()*110;
+    const a=Math.random()*6.283,d=70+Math.random()*(paper?160:110);
     e.style.setProperty('--x',Math.cos(a)*d+'px');
     e.style.setProperty('--y',Math.sin(a)*d-40+'px');
-    e.style.setProperty('--r',(Math.random()*120-60)+'deg');
+    e.style.setProperty('--r',(Math.random()*360-180)+'deg');
     document.body.appendChild(e);
     setTimeout(()=>e.remove(),950);
   }
@@ -290,7 +322,7 @@ $('#open').onclick=e=>{
 let deck=[],i=0,busy=false;
 const shuffle=a=>{for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a};
 function start(){deck=shuffle(R.slice());deck.push(null);i=0;render()}
-function render(){
+function render(opened){
   busy=false;
   const st=$('#stack');
   st.innerHTML='';
@@ -299,15 +331,30 @@ function render(){
   if(deck[i]===null){
     c.innerHTML='<div class="heart">♥</div><div class="big">دوستت دارم لیلیا</div><div class="small">این‌ها فقط بخشی از دلایلم بودن؛<br>دلیل‌هام هیچ‌وقت تموم نمی‌شن.</div><button class="go" id="again">یه دور دیگه</button>';
     $('#pg').style.width='100%';
-  }else{
-    c.innerHTML='<div class="kicker">دلیلِ من برای دوست داشتنت</div><div class="heart">♥</div><p></p>';
-    c.querySelector('p').textContent=deck[i];
-    $('#pg').style.width=(i/R.length*100)+'%';
+    st.appendChild(c);
+    attach(c);
+    const a=c.querySelector('#again');
+    a.onclick=e=>{e.stopPropagation();burst(e.clientX,e.clientY,30);start()};
+    return;
   }
+  c.innerHTML='<div class="gift"><i class="bow">🎀</i><div class="hint">یه کادو برات دارم، بزن روش تا باز بشه</div></div><div class="rev"><div class="kicker">دلیلِ من برای دوست داشتنت</div><div class="heart">♥</div><p></p></div>';
+  c.querySelector('p').textContent=deck[i];
+  $('#pg').style.width=(i/R.length*100)+'%';
   st.appendChild(c);
+  if(opened){attach(c)}
+  else{c.classList.add('closed');c.onclick=()=>openGift(c)}
+}
+function openGift(c){
+  if(!c.classList.contains('closed'))return;
+  c.onclick=null;
+  c.classList.remove('closed','in');
+  void c.offsetWidth;
+  c.classList.add('in');
+  if(navigator.vibrate)navigator.vibrate([60,40,120]);
+  const r=c.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+  burst(x,y,18);
+  burst(x,y,30,true);
   attach(c);
-  const a=c.querySelector('#again');
-  if(a)a.onclick=e=>{e.stopPropagation();burst(e.clientX,e.clientY,30);start()};
 }
 function fly(dir){
   if(busy)return;
@@ -322,7 +369,7 @@ function fly(dir){
 }
 function back(){
   if(busy||i===0)return;
-  i--;render();
+  i--;render(true);
 }
 function attach(c){
   let x0=0,dx=0,drag=false;
@@ -336,13 +383,28 @@ function attach(c){
   c.addEventListener('pointerup',end);
   c.addEventListener('pointercancel',end);
 }
-$('#nx').onclick=()=>fly(-1);
+$('#nx').onclick=()=>{const c=$('.card');if(c.classList.contains('closed'))openGift(c);else fly(-1)};
 $('#pv').onclick=back;
 document.addEventListener('keydown',e=>{
   if($('#s3').classList.contains('off'))return;
   if(e.key==='ArrowLeft')fly(-1);
   if(e.key==='ArrowRight')back();
 });
+
+const T=new Date(2026,10,17).getTime();
+let tm;
+function tick(){
+  const d=T-Date.now();
+  if(d<=0){clearInterval(tm);show('s1');return}
+  const z=Math.floor(d/1000);
+  $('#cd0').textContent=fa(Math.floor(z/86400));
+  $('#cd1').textContent=fa(Math.floor(z%86400/3600));
+  $('#cd2').textContent=fa(Math.floor(z%3600/60));
+  $('#cd3').textContent=fa(z%60);
+}
+window.addEventListener('hashchange',()=>{if(location.hash==='#test'){clearInterval(tm);show('s1')}});
+if(location.hash==='#test'||Date.now()>=T){show('s1')}
+else{show('s0');tick();tm=setInterval(tick,1000)}
 </script>
 </body>
 </html>
