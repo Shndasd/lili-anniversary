@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffe0e8">
+<title>برای لیلیا</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff0f3;--red:#c9184a;--deep:#800f2f;--pink:#ff758f;--soft:#ffb3c1}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;color:var(--deep);background:linear-gradient(135deg,#fff0f3,#ffd0dc,#ffb3c1,#ffe0e8);background-size:300% 300%;animation:bg 14s ease infinite;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+@keyframes bg{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
+#float{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+#float span{position:absolute;bottom:-60px;color:var(--pink);opacity:.35;animation:rise linear infinite}
+@keyframes rise{to{transform:translateY(-115vh) rotate(25deg);opacity:0}}
+.screen{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;transition:opacity .6s ease,transform .6s ease}
+.screen.off{opacity:0;pointer-events:none;transform:scale(.96)}
+h1{font-weight:800;font-size:clamp(1.5rem,6vw,2.1rem);line-height:1.8;text-align:center}
+.sub{font-weight:300;color:var(--red);margin-top:6px;font-size:.95rem;text-align:center;line-height:1.9}
+.chart{display:flex;gap:clamp(24px,10vw,64px);margin:28px 0 26px;align-items:flex-start}
+.col{display:flex;flex-direction:column;align-items:center;width:132px}
+.val{font-weight:800;font-size:1.8rem;color:var(--red);height:2.4rem}
+.track{position:relative;width:66px;height:min(34vh,260px);background:rgba(255,255,255,.75);border-radius:33px;border:2px solid var(--soft);overflow:hidden;touch-action:none;cursor:ns-resize}
+.fill{position:absolute;bottom:0;left:0;right:0;height:0;background:linear-gradient(to top,var(--red),var(--pink));border-radius:30px;box-shadow:0 0 22px var(--pink)}
+.fill::after{content:"♥";position:absolute;top:8px;left:0;right:0;text-align:center;color:#fff;font-size:1.2rem}
+.lbl{margin-top:12px;font-weight:500;font-size:.9rem;text-align:center;line-height:1.7;min-height:5.2em;width:132px}
+textarea{font-family:inherit;font-size:1.05rem;line-height:2;color:var(--deep);width:min(88vw,380px);margin:24px 0 24px;padding:16px 18px;border-radius:24px;border:2px solid var(--soft);background:rgba(255,255,255,.85);resize:none;outline:none;text-align:right}
+textarea:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(255,117,143,.25)}
+button{font-family:inherit;cursor:pointer;border:0}
+.go{background:linear-gradient(135deg,var(--red),#e5395f);color:#fff;font-weight:800;font-size:1.05rem;padding:14px 48px;border-radius:40px;box-shadow:0 10px 26px rgba(201,24,74,.35);transition:opacity .3s,transform .2s;animation:beat 1.6s ease-in-out infinite}
+.go:disabled{opacity:.35;box-shadow:none;animation:none}
+.go:not(:disabled):active{transform:scale(.95)}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.bigheart{font-size:5.5rem;color:var(--red);filter:drop-shadow(0 0 18px var(--pink));animation:beat 1.1s ease-in-out infinite;line-height:1.2}
+.txt{max-width:340px;text-align:center;line-height:2.2;font-weight:500;margin:14px 0 28px;font-size:1.1rem}
+.stack{position:relative;width:min(86vw,360px);height:min(58vh,450px)}
+.stack::before,.stack::after{content:"";position:absolute;inset:0;border-radius:30px;background:#fff;border:2px solid var(--soft)}
+.stack::before{transform:translateY(14px) scale(.93);opacity:.55}
+.stack::after{transform:translateY(7px) scale(.965);opacity:.8}
+.card{position:absolute;inset:0;z-index:2;border-radius:30px;border:2px solid var(--soft);box-shadow:0 26px 54px rgba(201,24,74,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 26px;text-align:center;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
+.c0{background:#fff}
+.c1{background:linear-gradient(160deg,#fff,#ffe3ea)}
+.c2{background:linear-gradient(200deg,#fff,#ffd3de)}
+.card.in{animation:pop .55s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{opacity:0;transform:scale(.8) rotate(-5deg) translateY(30px)}}
+.card.fly{transition:transform .28s ease-in,opacity .28s ease-in;opacity:0}
+.card.back{transition:transform .25s ease}
+.kicker{font-weight:300;font-size:.85rem;color:var(--red);margin-bottom:6px}
+.heart{font-size:2.3rem;color:var(--pink);margin-bottom:16px;animation:beat 1.4s ease-in-out infinite}
+.card p{font-weight:500;font-size:clamp(1.2rem,5.2vw,1.55rem);line-height:2.1}
+.card .big{font-weight:800;font-size:1.9rem;color:var(--red);line-height:1.9}
+.card .small{font-weight:300;margin-top:8px;line-height:2}
+.card .go{margin-top:22px;font-size:.95rem;padding:11px 32px}
+.prog{width:min(86vw,360px);height:5px;border-radius:5px;background:rgba(255,255,255,.7);margin-top:34px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(to left,var(--red),var(--pink));transition:width .4s}
+.bar{display:flex;gap:70px;margin-top:22px}
+.bar button{background:#fff;color:var(--red);width:52px;height:52px;border-radius:50%;font-size:1.6rem;box-shadow:0 6px 16px rgba(201,24,74,.18);border:2px solid var(--soft)}
+.bar button:active{transform:scale(.9)}
+.b{position:fixed;z-index:9;pointer-events:none;color:var(--red);animation:bu .9s ease-out forwards}
+@keyframes bu{to{transform:translate(var(--x),var(--y)) scale(1.3) rotate(var(--r));opacity:0}}
+button:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="float"></div>
+
+<section class="screen" id="s1">
+  <h1>لیلیا، یه سوال کوچولو ♥</h1>
+  <div class="sub">ستون‌ها رو با انگشتت بکش بالا</div>
+  <div class="chart">
+    <div class="col">
+      <div class="val" id="v0">–</div>
+      <div class="track" data-i="0"><div class="fill"></div></div>
+      <div class="lbl">از ۱۰۰ چقدر دوستم داری؟</div>
+    </div>
+    <div class="col">
+      <div class="val" id="v1">–</div>
+      <div class="track" data-i="1"><div class="fill"></div></div>
+      <div class="lbl">از ۱۰۰ چقدر احساس دوست‌داشته‌شدن می‌کنی؟</div>
+    </div>
+  </div>
+  <button class="go" id="next" disabled>ادامه</button>
+</section>
+
+<section class="screen off" id="sq">
+  <h1>یه سوال دیگه ♥</h1>
+  <div class="sub">هرچی دلت می‌خواد بنویس</div>
+  <textarea id="ans" rows="5" placeholder="امروز چیکار کنم خوشحال می‌شی؟"></textarea>
+  <button class="go" id="send" disabled>ارسال</button>
+</section>
+
+<section class="screen off" id="s2">
+  <div class="bigheart">♥</div>
+  <h1>ممنونم عشقم</h1>
+  <div class="txt">حالا نوبت منه. من برات کلی دلیل نوشتم که چرا اینقدر دوستت دارم. هر کارت یه دلیله؛ با انگشتت بکشش تا دلیل بعدی بیاد.</div>
+  <button class="go" id="open">دلیل‌هام رو نشونم بده</button>
+</section>
+
+<section class="screen off" id="s3">
+  <div class="stack" id="stack"></div>
+  <div class="prog"><i id="pg"></i></div>
+  <div class="bar">
+    <button id="nx" aria-label="بعدی">›</button>
+    <button id="pv" aria-label="قبلی">‹</button>
+  </div>
+</section>
+
+<script>
+const R=[
+"لبخندت روزم رو روشن می‌کنه.",
+"همیشه بلدی چطور منو از ته دل بخندونی.",
+"مهربونیت بهم انگیزه و امید می‌ده.",
+"با تمام وجود و علاقه‌ی واقعی به حرفام گوش می‌دی.",
+"پای تک‌تک رویاها و اهدافم می‌ایستی.",
+"قشنگ‌ترین و گیراترین چشم‌های دنیا رو داری.",
+"کنارت حس امنیت کامل و بی‌دغدغه دارم.",
+"بغل‌هات امن‌ترین و بهترین جای زمینه.",
+"فوق‌العاده باهوش، دقیق و بااحساسی.",
+"بهترین ویژگی‌های وجودم رو بیرون می‌کشی.",
+"صمیمی‌ترین و بهترین رفیق زندگی منی.",
+"منو با همه‌ی کاستی‌هام، دقیقاً همون‌طور که هستم پذیرفتی.",
+"روحیه‌ی ماجراجو و شجاعتت در زندگی.",
+"نگاه دلسوزانه و حمایتی که به اطرافیانت داری.",
+"خلاقیت بی‌نظیرت همیشه شگفت‌زده‌م می‌کنه.",
+"حتی ساده‌ترین و معمولی‌ترین لحظه‌ها رو خاص می‌کنی.",
+"حس شوخ‌طبعی ناب و طنازیت.",
+"طرز نگاه کردنت که پر از توجهه.",
+"صبر و مدارایی که در برابرم داری.",
+"هیچ‌وقت از رابطه‌مون و از «ما» پا پس نمی‌کشی.",
+"بزرگ‌ترین و همیشگی‌ترین مشوق منی.",
+"هوش، درک عمیق و تفاهمت.",
+"دستپخت فوق‌العاده و طعم غذاهات.",
+"رازدارترین و امن‌ترین محرم اسرارمی.",
+"بلدی چطور به بهترین شکل غافلگیرم کنی.",
+"همیشه آماده‌ی تجربه‌های جدیدی.",
+"انرژی مثبت و امیدواریت مسریه.",
+"پشتکار ستودنی و پرتلاشت.",
+"وفاداری اصیل و تعهد بی‌قیدوشرطت.",
+"کاری می‌کنی حس کنم ارزشمندم و دیده می‌شم.",
+"طنین صدای خنده‌هات حالم رو خوب می‌کنه.",
+"باعث می‌شی تلاش کنم آدم بهتری باشم.",
+"اشتیاقت برای کشف دنیا و تجربه‌های تازه.",
+"هر وقت بهت نیاز دارم، بدون بهانه کنارمی.",
+"شور و عطشی که نسبت به زندگی داری.",
+"حس آرامشی که موقع گرفتن دست‌هات دارم.",
+"هم‌صحبت صبور و شنونده‌ی بی‌نظیری هستی.",
+"بزرگواری، سخاوت و دست‌ودل‌بازیت.",
+"احترامی که همیشه و در هر شرایطی برام قائلی.",
+"صداقتت در گفتار و زلال بودنت با من.",
+"ستون محکم و تکیه‌گاه روزهای سختمی.",
+"بهم احساس دوست‌داشته‌شدن و ارزشمندی عمیق می‌دی.",
+"بوسه‌هات جادویی و آرامش‌بخشن.",
+"محبوب‌ترین آدم تمام این دنیایی.",
+"توانایی، صبوری و سرسختیت در بحران‌ها.",
+"اسمت برای من قشنگ‌ترین اسم دنیاست، لیلیا.",
+"فکر کردن به تو وسط شلوغ‌ترین روزها آرومم می‌کنه.",
+"باهات حتی سکوت هم راحته.",
+"با تو آینده برام ترسناک نیست، هیجان‌انگیزه.",
+"خاطره‌هایی که باهم ساختیم گنجینه‌ی منه.",
+"وقتی ذوق می‌کنی، دنیا برام قشنگ‌تر می‌شه.",
+"حواست به ریزترین جزئیات هست.",
+"باهات بودن مثل رسیدن به خونه‌ست.",
+"خودِ خودتی، بی‌تکلف و واقعی.",
+"هر روز یه دلیل جدید برای دوست داشتنت پیدا می‌کنم.",
+"هر بار که اسمت رو می‌شنوم، قلبم یه ضربه‌ی اضافه می‌زنه.",
+"تو تنها کسی هستی که دلم می‌خواد فردا رو هم باهاش شروع کنم.",
+"با تو، حتی یه روز معمولی هم شبیه یه فیلم عاشقانه می‌شه.",
+"عطر حضورت برای من یعنی خونه.",
+"وقتی دستم تو دستته، همه‌ی دنیا ساکت می‌شه.",
+"تو دلیلی هستی که به عشق واقعی ایمان دارم.",
+"هر شب با فکر تو چشمام رو می‌بندم و با فکر تو بیدار می‌شم.",
+"تو جواب تمام دعاهایی هستی که نمی‌دونستم می‌کردم.",
+"چشمای تو آسمونیه که می‌خوام تا آخر عمر زیرش زندگی کنم.",
+"با تو فهمیدم عاشق شدن یعنی چی.",
+"هرچی بیشتر می‌شناسمت، بیشتر عاشقت می‌شم.",
+"تو قشنگ‌ترین اتفاق زندگی منی.",
+"وقتی دلم می‌گیره، یه پیام از تو کل دنیامو عوض می‌کنه.",
+"دلم می‌خواد تمام عمر، هر روز، دوباره عاشقت بشم.",
+"تو آرامشی هستی که هیچ جای دیگه‌ای پیدا نکردم.",
+"با تو بودن یعنی ساده‌ترین شکل خوشبختی.",
+"تو تنها کسی هستی که با دیدنش دلم بی‌اختیار لبخند می‌زنه.",
+"دنیا بدون تو برام رنگی نداره.",
+"تو منو باور داری، حتی وقتی خودم به خودم شک دارم.",
+"هیچ‌وقت کسی منو اینطور کامل نکرده بود.",
+"عاشقانه‌ترین قسمت هر روزم، لحظه‌ی دیدن توئه.",
+"با تو حتی انتظار کشیدن هم شیرینه.",
+"مراقبت و توجه‌هات، عشق رو برام ملموس می‌کنه.",
+"تو همون کسی هستی که قلبم از اولین نگاه می‌شناختش.",
+"با یه لمس دستت، همه‌ی نگرانی‌هام آب می‌شه.",
+"تو بهم یاد می‌دی که دوست داشتن یعنی موندن.",
+"وقتی کنارت خوابم می‌بره، قشنگ‌ترین خواب‌ها رو می‌بینم.",
+"هیچ ستاره‌ای تو آسمون به اندازه‌ی تو برام درخشان نیست.",
+"با تو، «همیشه» یه کلمه‌ی ترسناک نیست؛ یه وعده‌ی قشنگه.",
+"تو بهانه‌ی تمام قشنگی‌های زندگی منی.",
+"دوست دارم تو تمام نقشه‌های آینده‌م، اسم تو اولین باشه.",
+"اگه دنیا هزار بار دیگه شروع بشه، هزار بار دیگه تو رو انتخاب می‌کنم.",
+"تو نفس‌هام رو آروم و دلم رو گرم می‌کنی.",
+"قلبم از وقتی تو رو پیدا کرد، دیگه هیچ‌جا دنبال چیزی نگشت.",
+"باهات حس می‌کنم کسی هستم که همیشه می‌خواستم باشم.",
+"تو شعرِ نانوشته‌ی زندگی منی.",
+"بوی تو یعنی آرامش مطلق.",
+"تو هم عشقی، هم دوستی، هم خونه‌ای.",
+"هر وقت می‌خندی، کل دنیا برای لحظه‌ای متوقف می‌شه.",
+"خدا رو شکر می‌کنم که تو رو سر راهم گذاشت.",
+"عشق من به تو هر روز از دیروز بزرگ‌تره.",
+"با تو یاد گرفتم عشق، همون خوشبختیِ بی‌حرفه.",
+"قلب من، از اولین روز تا آخرین نفس، مال توئه.",
+"تو تموم‌نشدنی‌ترین دلیل برای زنده بودن و عاشق موندنی.",
+"و دلیل آخر: چون تو، لیلیا، تویی؛ و من عاشق همین «تو»م."
+];
+const $=s=>document.querySelector(s);
+const fa=n=>n.toLocaleString('fa-IR');
+
+const fl=$('#float');
+for(let k=0;k<16;k++){
+  const s=document.createElement('span');
+  s.textContent='♥';
+  s.style.left=Math.random()*100+'%';
+  s.style.fontSize=(14+Math.random()*30)+'px';
+  s.style.animationDuration=(9+Math.random()*10)+'s';
+  s.style.animationDelay=(-Math.random()*14)+'s';
+  fl.appendChild(s);
+}
+function burst(x,y,n){
+  for(let k=0;k<n;k++){
+    const e=document.createElement('span');
+    e.className='b';
+    e.textContent=Math.random()>.5?'♥':'❤';
+    e.style.left=x+'px';e.style.top=y+'px';
+    e.style.fontSize=(14+Math.random()*18)+'px';
+    const a=Math.random()*6.283,d=50+Math.random()*110;
+    e.style.setProperty('--x',Math.cos(a)*d+'px');
+    e.style.setProperty('--y',Math.sin(a)*d-40+'px');
+    e.style.setProperty('--r',(Math.random()*120-60)+'deg');
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),950);
+  }
+}
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('off',s.id!==id));
+}
+
+const vals=[null,null];
+document.querySelectorAll('.track').forEach(t=>{
+  const i=+t.dataset.i,f=t.firstElementChild;
+  let on=false;
+  const set=e=>{
+    const r=t.getBoundingClientRect();
+    const v=Math.round(Math.min(100,Math.max(0,(r.bottom-e.clientY)/r.height*100)));
+    vals[i]=v;f.style.height=v+'%';$('#v'+i).textContent=fa(v);
+    $('#next').disabled=vals.some(x=>x===null);
+  };
+  t.addEventListener('pointerdown',e=>{on=true;t.setPointerCapture(e.pointerId);set(e);burst(e.clientX,e.clientY,5)});
+  t.addEventListener('pointermove',e=>{if(on)set(e)});
+  t.addEventListener('pointerup',e=>{on=false;burst(e.clientX,e.clientY,8)});
+  t.addEventListener('pointercancel',()=>on=false);
+});
+const ACCESS_KEY='73762a4d-8cc8-4957-8f37-ae550a524bb8';
+function sendValues(){
+  fetch('https://api.web3forms.com/submit',{
+    method:'POST',
+    headers:{'Content-Type':'application/json',Accept:'application/json'},
+    body:JSON.stringify({
+      access_key:ACCESS_KEY,
+      subject:'جواب لیلیا به سوال‌هات ♥',
+      from_name:'سایت لیلیا',
+      'چقدر دوستم داری (از ۱۰۰)':vals[0],
+      'چقدر احساس دوست‌داشته‌شدن می‌کنی (از ۱۰۰)':vals[1]
+    })
+  }).catch(()=>{});
+}
+$('#next').onclick=e=>{
+  sendValues();
+  burst(e.clientX,e.clientY,30);
+  setTimeout(()=>show('sq'),500);
+};
+$('#ans').addEventListener('input',()=>{$('#send').disabled=!$('#ans').value.trim()});
+$('#send').onclick=e=>{
+  fetch('https://api.web3forms.com/submit',{
+    method:'POST',
+    headers:{'Content-Type':'application/json',Accept:'application/json'},
+    body:JSON.stringify({
+      access_key:ACCESS_KEY,
+      subject:'لیلیا می‌گه امروز چیکار کنی خوشحال می‌شه ♥',
+      from_name:'سایت لیلیا',
+      'امروز چیکار کنم خوشحال می‌شی؟':$('#ans').value.trim()
+    })
+  }).catch(()=>{});
+  burst(e.clientX,e.clientY,30);
+  setTimeout(()=>show('s2'),500);
+};
+$('#open').onclick=e=>{
+  burst(e.clientX,e.clientY,30);
+  setTimeout(()=>{show('s3');start()},450);
+};
+
+let deck=[],i=0,busy=false;
+const shuffle=a=>{for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a};
+function start(){deck=shuffle(R.slice());deck.push(null);i=0;render()}
+function render(){
+  busy=false;
+  const st=$('#stack');
+  st.innerHTML='';
+  const c=document.createElement('div');
+  c.className='card in c'+(i%3);
+  if(deck[i]===null){
+    c.innerHTML='<div class="heart">♥</div><div class="big">دوستت دارم لیلیا</div><div class="small">این‌ها فقط بخشی از دلایلم بودن؛<br>دلیل‌هام هیچ‌وقت تموم نمی‌شن.</div><button class="go" id="again">یه دور دیگه</button>';
+    $('#pg').style.width='100%';
+  }else{
+    c.innerHTML='<div class="kicker">دلیلِ من برای دوست داشتنت</div><div class="heart">♥</div><p></p>';
+    c.querySelector('p').textContent=deck[i];
+    $('#pg').style.width=(i/R.length*100)+'%';
+  }
+  st.appendChild(c);
+  attach(c);
+  const a=c.querySelector('#again');
+  if(a)a.onclick=e=>{e.stopPropagation();burst(e.clientX,e.clientY,30);start()};
+}
+function fly(dir){
+  if(busy)return;
+  busy=true;
+  const c=$('.card');
+  const r=c.getBoundingClientRect();
+  burst(r.left+r.width/2,r.top+r.height/2,12);
+  c.classList.remove('in');
+  c.classList.add('fly');
+  c.style.transform='translateX('+(dir*520)+'px) rotate('+(dir*18)+'deg)';
+  setTimeout(()=>{if(deck[i]===null){start()}else{i++;render()}},260);
+}
+function back(){
+  if(busy||i===0)return;
+  i--;render();
+}
+function attach(c){
+  let x0=0,dx=0,drag=false;
+  c.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;drag=true;x0=e.clientX;dx=0;c.classList.remove('back','in');c.setPointerCapture(e.pointerId)});
+  c.addEventListener('pointermove',e=>{if(!drag)return;dx=e.clientX-x0;c.style.transform='translateX('+dx+'px) rotate('+(dx/18)+'deg)'});
+  const end=()=>{
+    if(!drag)return;drag=false;
+    if(Math.abs(dx)>80){fly(dx>0?1:-1)}
+    else{c.classList.add('back');c.style.transform=''}
+  };
+  c.addEventListener('pointerup',end);
+  c.addEventListener('pointercancel',end);
+}
+$('#nx').onclick=()=>fly(-1);
+$('#pv').onclick=back;
+document.addEventListener('keydown',e=>{
+  if($('#s3').classList.contains('off'))return;
+  if(e.key==='ArrowLeft')fly(-1);
+  if(e.key==='ArrowRight')back();
+});
+</script>
+</body>
+</html>
