@@ -261,21 +261,7 @@ document.querySelectorAll('.track').forEach(t=>{
   t.addEventListener('pointercancel',()=>on=false);
 });
 const ACCESS_KEY='73762a4d-8cc8-4957-8f37-ae550a524bb8';
-function sendValues(){
-  fetch('https://api.web3forms.com/submit',{
-    method:'POST',
-    headers:{'Content-Type':'application/json',Accept:'application/json'},
-    body:JSON.stringify({
-      access_key:ACCESS_KEY,
-      subject:'جواب لیلیا به سوال‌هات ♥',
-      from_name:'سایت لیلیا',
-      'چقدر دوستم داری (از ۱۰۰)':vals[0],
-      'چقدر احساس دوست‌داشته‌شدن می‌کنی (از ۱۰۰)':vals[1]
-    })
-  }).catch(()=>{});
-}
 $('#next').onclick=e=>{
-  sendValues();
   burst(e.clientX,e.clientY,30);
   setTimeout(()=>show('sq'),500);
 };
@@ -286,8 +272,10 @@ $('#send').onclick=e=>{
     headers:{'Content-Type':'application/json',Accept:'application/json'},
     body:JSON.stringify({
       access_key:ACCESS_KEY,
-      subject:'لیلیا می‌گه امروز چیکار کنی خوشحال می‌شه ♥',
+      subject:'جواب‌های لیلیا ♥',
       from_name:'سایت لیلیا',
+      'چقدر دوستم داری (از ۱۰۰)':vals[0],
+      'چقدر احساس دوست‌داشته‌شدن می‌کنی (از ۱۰۰)':vals[1],
       'امروز چیکار کنم خوشحال می‌شی؟':$('#ans').value.trim()
     })
   }).catch(()=>{});
