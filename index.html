@@ -34,15 +34,12 @@ textarea:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(255,117,143,.25
 .cd div{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.8);border:2px solid var(--soft);border-radius:20px;padding:12px 0;width:72px;box-shadow:0 8px 20px rgba(201,24,74,.15)}
 .cd b{font-weight:800;font-size:1.8rem;color:var(--red);line-height:1.5}
 .cd small{font-weight:300;font-size:.8rem}
-.card.closed{background:linear-gradient(160deg,#ff8fa3,#e5395f);border-color:#ff758f;cursor:pointer;overflow:hidden}
-.card.closed::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:56px;margin-left:-28px;background:rgba(255,255,255,.4)}
-.card.closed::after{content:"";position:absolute;left:0;right:0;top:50%;height:56px;margin-top:-28px;background:rgba(255,255,255,.4)}
-.card.closed .rev{display:none}
-.card:not(.closed) .gift{display:none}
-.gift{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
-.bow{font-style:normal;font-size:5rem;line-height:1;filter:drop-shadow(0 6px 10px rgba(128,15,47,.35));animation:shake 1.8s ease-in-out infinite}
-@keyframes shake{0%,70%,100%{transform:rotate(0)}75%{transform:rotate(-9deg)}85%{transform:rotate(9deg)}92%{transform:rotate(-5deg)}}
-.hint{margin-top:22px;background:#fff;color:var(--red);font-weight:800;padding:10px 22px;border-radius:30px;font-size:1rem;box-shadow:0 8px 20px rgba(128,15,47,.25);animation:beat 1.4s ease-in-out infinite}
+.card.closed{overflow:hidden;touch-action:none;cursor:grab}
+.paper{position:absolute;inset:0;z-index:3;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.half{position:absolute;inset:0;background:radial-gradient(circle,rgba(255,255,255,.55) 3px,transparent 4px) 0 0/28px 28px,radial-gradient(circle,rgba(255,255,255,.3) 2px,transparent 3px) 14px 14px/28px 28px,linear-gradient(160deg,#ff8fa3,#e5395f);filter:drop-shadow(0 0 6px rgba(128,15,47,.45))}
+.half.l{clip-path:polygon(0 0,52% 0,47% 8%,54% 16%,46% 25%,53% 34%,47% 43%,54% 52%,46% 61%,53% 70%,47% 79%,54% 88%,49% 100%,0 100%)}
+.half.r{clip-path:polygon(52% 0,100% 0,100% 100%,49% 100%,54% 88%,47% 79%,53% 70%,46% 61%,54% 52%,47% 43%,53% 34%,46% 25%,54% 16%,47% 8%)}
+.hint{position:relative;z-index:1;background:#fff;color:var(--red);font-weight:800;padding:12px 22px;border-radius:30px;font-size:1rem;white-space:nowrap;box-shadow:0 8px 20px rgba(128,15,47,.3);animation:beat 1.4s ease-in-out infinite}
 .rev{display:flex;flex-direction:column;align-items:center}
 button{font-family:inherit;cursor:pointer;border:0}
 .go{background:linear-gradient(135deg,var(--red),#e5395f);color:#fff;font-weight:800;font-size:1.05rem;padding:14px 48px;border-radius:40px;box-shadow:0 10px 26px rgba(201,24,74,.35);transition:opacity .3s,transform .2s;animation:beat 1.6s ease-in-out infinite}
@@ -337,24 +334,59 @@ function render(opened){
     a.onclick=e=>{e.stopPropagation();burst(e.clientX,e.clientY,30);start()};
     return;
   }
-  c.innerHTML='<div class="gift"><i class="bow">🎀</i><div class="hint">یه کادو برات دارم، بزن روش تا باز بشه</div></div><div class="rev"><div class="kicker">دلیلِ من برای دوست داشتنت</div><div class="heart">♥</div><p></p></div>';
+  c.innerHTML='<div class="paper"><div class="half l"></div><div class="half r"></div><div class="hint">↔ بکشش به دو طرف تا پاره بشه</div></div><div class="rev"><div class="kicker">دلیلِ من برای دوست داشتنت</div><div class="heart">♥</div><p></p></div>';
   c.querySelector('p').textContent=deck[i];
   $('#pg').style.width=(i/R.length*100)+'%';
   st.appendChild(c);
   if(opened){attach(c)}
-  else{c.classList.add('closed');c.onclick=()=>openGift(c)}
+  else{c.classList.add('closed');attachTear(c)}
+}
+function attachTear(c){
+  const l=c.querySelector('.l'),r=c.querySelector('.r'),h=c.querySelector('.hint');
+  let x0=0,dx=0,on=false;
+  const pose=p=>{
+    l.style.transform='translateX('+(-p*70)+'%) rotate('+(-p*10)+'deg)';
+    r.style.transform='translateX('+(p*70)+'%) rotate('+(p*10)+'deg)';
+    h.style.opacity=1-p*1.6;
+  };
+  c.addEventListener('pointerdown',e=>{if(c.dataset.ripping)return;on=true;x0=e.clientX;dx=0;c.setPointerCapture(e.pointerId)});
+  c.addEventListener('pointermove',e=>{
+    if(!on||c.dataset.ripping)return;
+    dx=Math.abs(e.clientX-x0);
+    l.style.transition=r.style.transition='none';
+    pose(Math.min(1,dx/140));
+  });
+  c.addEventListener('pointerup',()=>{
+    if(!on||c.dataset.ripping)return;
+    on=false;
+    if(dx>50||dx<6){openGift(c)}
+    else{l.style.transition=r.style.transition='transform .25s';pose(0)}
+  });
+  c.addEventListener('pointercancel',()=>{
+    if(!on||c.dataset.ripping)return;
+    on=false;
+    l.style.transition=r.style.transition='transform .25s';
+    pose(0);
+  });
 }
 function openGift(c){
-  if(!c.classList.contains('closed'))return;
-  c.onclick=null;
-  c.classList.remove('closed','in');
-  void c.offsetWidth;
-  c.classList.add('in');
-  if(navigator.vibrate)navigator.vibrate([60,40,120]);
-  const r=c.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
-  burst(x,y,18);
-  burst(x,y,30,true);
-  attach(c);
+  if(!c.classList.contains('closed')||c.dataset.ripping)return;
+  c.dataset.ripping='1';
+  const l=c.querySelector('.l'),r=c.querySelector('.r'),h=c.querySelector('.hint');
+  l.style.transition=r.style.transition='transform .45s ease-in,opacity .45s ease-in';
+  l.style.transform='translateX(-130%) rotate(-24deg)';
+  r.style.transform='translateX(130%) rotate(24deg)';
+  l.style.opacity=r.style.opacity=0;
+  h.style.opacity=0;
+  if(navigator.vibrate)navigator.vibrate([30,20,30,20,60,30,120]);
+  const b=c.getBoundingClientRect(),x=b.left+b.width/2,y=b.top+b.height/2;
+  burst(x,y,36,true);
+  burst(x,y,10);
+  setTimeout(()=>{
+    c.classList.remove('closed');
+    c.querySelector('.paper').remove();
+    attach(c);
+  },450);
 }
 function fly(dir){
   if(busy)return;
